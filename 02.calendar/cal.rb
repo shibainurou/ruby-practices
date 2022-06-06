@@ -29,8 +29,7 @@ title = params["m"].to_s + "月 " + params["y"].to_s
 header = ["日", "月", "火", "水", "木", "金", "土"]
 
 # title
-print " " * ((SCR_WIDTH - title.size) / 2)
-puts title
+puts title.center(SCR_WIDTH)
 
 # header
 puts header.join(" " * MARGIN)
