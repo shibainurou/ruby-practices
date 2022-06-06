@@ -8,6 +8,7 @@ begin
 rescue
   params = {}
 end
+params["y"] ||= Date.today.year
 
 if params["y"].nil?
   params["y"] = Date.today.year
