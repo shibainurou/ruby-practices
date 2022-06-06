@@ -25,7 +25,7 @@ CHAR_SIZE = 2
 MARGIN = 1
 SCR_WIDTH = (7 * CHAR_SIZE) + (MARGIN * 6)
 
-title = params["m"].to_s + "月 " + params["y"].to_s
+title = "#{params["m"]}月  #{params["y"]}"
 header = ["日", "月", "火", "水", "木", "金", "土"]
 
 # title
