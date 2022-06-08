@@ -11,11 +11,7 @@ class GameJudge
   end
 
   def strike(point)
-    return false if point.nil?
-
-    return true if point == 'X'
-
-    false
+    point == 'X'
   end
 
   def spare(point1, point2)
