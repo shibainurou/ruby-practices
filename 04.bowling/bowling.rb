@@ -34,7 +34,7 @@ strike_extra_point_position = []
 prev_spare = false
 
 def split_frame(throw_list)
-  frame_point = Array.new(10) { [] }
+  frame_point = Array.new(LAST_FRAME) { [] }
   frame_index = 0
   throw_list.each do |point|
     frame_point[frame_index].push(point.to_s)
