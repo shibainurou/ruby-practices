@@ -2,20 +2,7 @@
 # frozen_string_literal: true
 
 class GameJudge
-  POINT_SCORE_TABLE = {
-    '0' => 0,
-    '1' => 1,
-    '2' => 2,
-    '3' => 3,
-    '4' => 4,
-    '5' => 5,
-    '6' => 6,
-    '7' => 7,
-    '8' => 8,
-    '9' => 9,
-    '10' => 10,
-    'X' => 10
-  }.freeze
+  POINT_SCORE_TABLE = Hash[(0..10).map { |v| [v.to_s, v] }.push(['X', 10])].freeze
 
   def point2score(point)
     return 0 if point.nil?
