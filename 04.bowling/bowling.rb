@@ -2,12 +2,12 @@
 # frozen_string_literal: true
 
 class GameJudge
-  POINT_SCORE_TABLE = Hash[(0..10).map { |v| [v.to_s, v] }.push(['X', 10])].freeze
-
   def point2score(point)
     return 0 if point.nil?
 
-    POINT_SCORE_TABLE[point]
+    return 10 if point == 'X'
+
+    point.to_i
   end
 
   def strike(point)
@@ -19,7 +19,7 @@ class GameJudge
 
     return false if point1 == 'X'
 
-    return true if POINT_SCORE_TABLE[point1] + POINT_SCORE_TABLE[point2] == 10
+    return true if point2score(point1) + point2score(point2) == 10
 
     false
   end
