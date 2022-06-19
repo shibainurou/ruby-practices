@@ -10,11 +10,11 @@ class GameJudge
     point.to_i
   end
 
-  def strike(point)
+  def strike?(point)
     point == 'X'
   end
 
-  def spare(point1, point2)
+  def spare?(point1, point2)
     return false if point1.nil? || point2.nil?
 
     return false if point1 == 'X'
@@ -51,7 +51,7 @@ split_frame(ARGV.join.split(',')).each do |throw1, throw2, throw3|
   end
 
   total_score += judge.point2score(throw1) if prev_spare
-  prev_spare = judge.spare(throw1, throw2)
+  prev_spare = judge.spare?(throw1, throw2)
 
   strike_extra_point_position.each do |num|
     total_score += judge.point2score(throw1) if throw_count + 1 == num
@@ -62,7 +62,7 @@ split_frame(ARGV.join.split(',')).each do |throw1, throw2, throw3|
     throw_count += 1 unless v.nil?
   end
 
-  if judge.strike(throw1)
+  if judge.strike?(throw1)
     strike_extra_point_position.push(throw_count + 1)
     strike_extra_point_position.push(throw_count + 2)
   end
