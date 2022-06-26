@@ -16,7 +16,7 @@ def target_list(file_list)
 end
 
 def dot_file(file_name)
-  file_name[0] == '.'
+  file_name.start_with?('.')
 end
 
 def display_rows(list, columns)
