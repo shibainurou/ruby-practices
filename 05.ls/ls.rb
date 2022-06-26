@@ -34,7 +34,6 @@ rows_num.times do |row|
     break if print_index > list.size
 
     value = list[print_index]
-    # p "#{row} #{col} #{display_index(row, col, rows_num)}"
     print value.filename.ljust(max_len + 1, ' ') unless value.nil?
 
     print_index += rows_num
