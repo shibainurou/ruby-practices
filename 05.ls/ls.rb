@@ -25,7 +25,7 @@ end
 
 num_cols = 3
 
-list, max_len = target_list(Dir.entries('.'))
+list, max_len = target_list(Dir.glob('*'))
 
 rows_num = display_rows(list, num_cols)
 rows_num.times do |row|
