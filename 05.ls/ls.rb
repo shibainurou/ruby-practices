@@ -7,16 +7,10 @@ def target_list(file_list)
   list = []
   max_len = 0
   file_list.each do |v|
-    next if dot_file(v)
-
     list.push(Struct::Display.new(v))
     max_len = [max_len, v.length].max
   end
   [list, max_len]
-end
-
-def dot_file(file_name)
-  file_name.start_with?('.')
 end
 
 def display_rows(list, columns)
