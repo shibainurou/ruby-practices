@@ -18,11 +18,10 @@ def display_rows(list, columns)
 end
 
 def target_files
-  if @show_dotfile_flag
-    Dir.glob('*', File::FNM_DOTMATCH)
-  else
-    Dir.glob('*')
-  end
+  flag = 0
+  flag = File::FNM_DOTMATCH if @show_dotfile_flag
+
+  Dir.glob('*', flag)
 end
 
 num_cols = 3
