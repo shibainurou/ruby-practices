@@ -17,23 +17,23 @@ def display_rows(list, columns)
   (list.size.to_r / columns.to_r).to_f.ceil
 end
 
-def target_files
+def target_files(show_dotfile_flag)
   flag = 0
-  flag = File::FNM_DOTMATCH if @show_dotfile_flag
+  flag = File::FNM_DOTMATCH if show_dotfile_flag
 
   Dir.glob('*', flag)
 end
 
 num_cols = 3
-@show_dotfile_flag = false
+show_dotfile_flag = false
 
 ARGV.each do |v|
-  netxt unless v.start_with?('-')
+  next unless v.start_with?('-')
 
-  @show_dotfile_flag = true if v.include?('a')
+  show_dotfile_flag = true if v.include?('a')
 end
 
-list, max_len = target_list(target_files)
+list, max_len = target_list(target_files(show_dotfile_flag))
 
 rows_num = display_rows(list, num_cols)
 rows_num.times do |row|
