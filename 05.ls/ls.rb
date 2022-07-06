@@ -17,9 +17,21 @@ def display_rows(list, columns)
   (list.size.to_r / columns.to_r).to_f.ceil
 end
 
-num_cols = 3
+def order_files(reverse_flag)
+  files = Dir.glob('*').sort
+  reverse_flag ? files.reverse : files
+end
 
-list, max_len = target_list(Dir.glob('*'))
+num_cols = 3
+reverse_flag = false
+
+ARGV.each do |v|
+  next unless v.start_with?('-')
+
+  reverse_flag = true if v.include?('r')
+end
+
+list, max_len = target_list(order_files(reverse_flag))
 
 rows_num = display_rows(list, num_cols)
 rows_num.times do |row|
@@ -28,7 +40,7 @@ rows_num.times do |row|
     break if print_index > list.size
 
     value = list[print_index]
-    print value.filename.ljust(max_len + 1, ' ') unless value.nil?
+    print value.filename.ljust(max_len, ' ').concat("\t") unless value.nil?
 
     print_index += rows_num
   end
