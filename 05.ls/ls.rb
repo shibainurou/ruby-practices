@@ -3,33 +3,12 @@
 
 require 'etc'
 
-num_cols = 3
-show_list_flag = false
-
 Struct.new('Display', :filename, :type, :permission, :hardlink, :owner, :group, :filesize, :timestamp, :blocks)
 Struct.new('MaxLenght', :filename, :type, :permission, :hardlink, :owner, :group, :filesize, :timestamp)
 
-file_type_str = {
-  'file' => '-',
-  'blockSpecial' => 'b',
-  'characterSpecial' => 'c',
-  'directory' => 'd',
-  'link' => 'l',
-  'fifo' => 'p',
-  'socket' => 's',
-  'unknown' => '?'
-}.freeze
-
-permission_str = {
-  0 => '-',
-  4 => 'r',
-  2 => 'w',
-  1 => 'x'
-}.freeze
-
 def target_list(file_list, file_type_str, permission_str)
   list = []
-  file_list.each do |f|
+  file_list.map do |f|
     stat = File.lstat(f)
     d = Struct::Display.new(f)
     d.filename = f
@@ -67,54 +46,83 @@ def display_rows(list, columns)
 end
 
 def print_file_info(file, max_len)
-  print file.type.rjust(max_len.type, ' ')
-  print "#{file.permission.rjust(max_len.permission, ' ')}  "
-  print "#{file.hardlink.rjust(max_len.hardlink, ' ')} "
-  print "#{file.owner.ljust(max_len.owner, ' ')}  "
-  print "#{file.group.ljust(max_len.group, ' ')}  "
-  print "#{file.filesize.to_s.rjust(max_len.filesize, ' ')} "
-  print "#{file.timestamp.rjust(max_len.timestamp, ' ')} "
+  print file.type.rjust(max_len.type)
+  print "#{file.permission.rjust(max_len.permission)}  "
+  print "#{file.hardlink.rjust(max_len.hardlink)} "
+  print "#{file.owner.ljust(max_len.owner)}  "
+  print "#{file.group.ljust(max_len.group)}  "
+  print "#{file.filesize.to_s.rjust(max_len.filesize)} "
+  print "#{file.timestamp.rjust(max_len.timestamp)} "
   print file.filename
   print " -> #{File.readlink(file.filename)}" if file.type == 'l'
 end
 
 def print_permission(mode, permission_str)
-  permission = ''
   # 0100744 -> 774
-  mode.to_s(8)[-3, 3].split('') do |v|
-    2.downto(0) do |count|
-      permission += permission_str[v.to_i & (1 << count)]
-    end
+  mode.to_s(8)[-3, 3].split('').map do |v|
+    2.downto(0).map { |count| permission_str[v.to_i & (1 << count)] }.join
+  end.join
+end
+
+def option_l(argv)
+  show_list_flag = false
+  argv.each do |v|
+    next unless v.start_with?('-')
+
+    show_list_flag = true if v.include?('l')
   end
-  permission
+  show_list_flag
 end
 
-ARGV.each do |v|
-  next unless v.start_with?('-')
+def show_list(file_list, max_len)
+  puts "total #{file_list.map(&:blocks).sum}"
 
-  show_list_flag = true if v.include?('l')
+  file_list.each do |v|
+    print_file_info(v, max_len)
+    print "\n"
+  end
 end
 
-num_cols = 1 if show_list_flag
+def show_columns(file_list, max_len)
+  column_count = 3
+  rows_num = display_rows(file_list, column_count)
+
+  rows_num.times do |row|
+    print_index = row
+    column_count.times do
+      break if print_index > file_list.size
+
+      file = file_list[print_index]
+      print file.filename.ljust(max_len.filename).concat("\t") unless file.nil?
+      print_index += rows_num
+    end
+    print "\n"
+  end
+end
+
+file_type_str = {
+  'file' => '-',
+  'blockSpecial' => 'b',
+  'characterSpecial' => 'c',
+  'directory' => 'd',
+  'link' => 'l',
+  'fifo' => 'p',
+  'socket' => 's',
+  'unknown' => '?'
+}.freeze
+
+permission_str = {
+  0 => '-',
+  4 => 'r',
+  2 => 'w',
+  1 => 'x'
+}.freeze
 
 file_list = target_list(Dir.glob('*').sort, file_type_str, permission_str)
 max_len = max_lenght(file_list)
-rows_num = display_rows(file_list, num_cols)
 
-puts "total #{file_list.map(&:blocks).sum}" if show_list_flag
-
-rows_num.times do |row|
-  print_index = row
-  num_cols.times do
-    break if print_index > file_list.size
-
-    file = file_list[print_index]
-    if show_list_flag
-      print_file_info(file, max_len) if show_list_flag
-    else
-      print file.filename.ljust(max_len.filename, ' ').concat("\t") unless file.nil?
-    end
-    print_index += rows_num
-  end
-  print "\n"
+if option_l(ARGV)
+  show_list(file_list, max_len)
+else
+  show_columns(file_list, max_len)
 end
