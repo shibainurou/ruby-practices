@@ -65,13 +65,9 @@ def print_permission(mode, permission_str)
 end
 
 def option_l(argv)
-  show_list_flag = false
-  argv.each do |v|
-    next unless v.start_with?('-')
-
-    show_list_flag = true if v.include?('l')
+  argv.any? do |v|
+    v.start_with?('-') && v.include?('l')
   end
-  show_list_flag
 end
 
 def show_list(file_list, max_len)
