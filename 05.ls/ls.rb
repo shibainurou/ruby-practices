@@ -17,7 +17,6 @@ def colmuns_information(file_list)
 end
 
 def list_information(file_list, file_type_str, permission_str)
-  list = []
   file_list.map do |f|
     stat = File.lstat(f)
     d = Struct::Display.new(f)
@@ -30,10 +29,8 @@ def list_information(file_list, file_type_str, permission_str)
     d.filesize = stat.size
     d.timestamp = stat.mtime.strftime('%_m %_d %H:%M')
     d.blocks = stat.blocks
-
-    list.push(d)
+    d
   end
-  list
 end
 
 def max_lenght(list)
@@ -63,17 +60,9 @@ def target_files(show_dotfile_flag)
 end
 
 def option
-  show_dotfile_flag = false
-  reverse_flag = false
-  list_flag = false
-  ARGV.each do |v|
-    next unless v.start_with?('-')
-
-    show_dotfile_flag = true if v.include?('a')
-    reverse_flag = true if v.include?('r')
-    list_flag = true if v.include?('l')
+  %w[a r l].map do |opt|
+    ARGV.any? { |v| v.start_with?('-') && v.include?(opt) }
   end
-  [show_dotfile_flag, reverse_flag, list_flag]
 end
 
 def print_file_info(file, max_len)
