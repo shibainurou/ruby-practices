@@ -19,18 +19,21 @@ def splite_argumnet
   [options_str, files]
 end
 
-def each_count(str, disp)
+Struct.new('WcData', :filename, :line_count, :word_count, :byte_count)
+def count_contents(str, wcdata)
+  result = wcdata.dup
   str.each_line do |line|
-    disp.line_count += 1
-    disp.word_count += line.split.size
-    disp.byte_count += line.bytesize
+    result.line_count += 1
+    result.word_count += line.split.size
+    result.byte_count += line.bytesize
   end
+  result
 end
 
 Struct.new('MaxLenght', :filename, :line, :word, :byte)
-def max_lenght(list)
+def max_length(wcdata_list)
   max = Struct::MaxLenght.new(0, 0, 0, 0)
-  list.each do |v|
+  wcdata_list.each do |v|
     max.filename = [max.filename, v.filename.length].max
     max.line = [max.line, v.line_count.to_s.length].max
     max.word = [max.word, v.word_count.to_s.length].max
@@ -39,23 +42,22 @@ def max_lenght(list)
   max
 end
 
-Struct.new('Display', :filename, :line_count, :word_count, :byte_count)
 options_str, files = splite_argumnet
 
 disp_lines = []
 if files.empty?
-  disp_lines.push(Struct::Display.new('', 0, 0, 0))
-  each_count($stdin, disp_lines.last)
+  disp_lines.push(count_contents($stdin, Struct::WcData.new('', 0, 0, 0)))
 else
   files.each do |file_name|
-    disp_lines.push(Struct::Display.new(file_name, 0, 0, 0))
+    wcdata = Struct::WcData.new(file_name, 0, 0, 0)
     File.foreach(file_name) do |line|
-      each_count(line, disp_lines.last)
+      wcdata = count_contents(line, wcdata)
     end
+    disp_lines.push(wcdata)
   end
 end
 
-max_len = max_lenght(disp_lines)
+max_len = max_length(disp_lines)
 
 disp_lines.each do |v|
   print v.line_count.to_s.rjust(max_len.line).prepend('     ') if options_str.include?('l')
