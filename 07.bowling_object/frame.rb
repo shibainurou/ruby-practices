@@ -8,7 +8,6 @@ class Frame
 
   def initialize
     @shots = []
-    @shot_count = 0
     @score = 0
     @bonus_count = 0
   end
@@ -19,8 +18,6 @@ class Frame
 
     @bonus_count = 2 if strike?
     @bonus_count = 1 if spare?
-
-    @shot_count += 1
   end
 
   def strike?
@@ -37,7 +34,7 @@ class Frame
 
   def calculate_bonus(bonus_frames)
     bonus_frames.each do |bonus_frame|
-      bonus_frame.add_bounus_score(@shots[@shot_count - 1].score)
+      bonus_frame.add_bounus_score(@shots[@shots.count - 1].score)
     end
   end
 
