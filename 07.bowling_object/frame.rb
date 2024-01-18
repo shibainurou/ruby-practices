@@ -34,7 +34,7 @@ class Frame
 
   def calculate_bonus(bonus_frames)
     bonus_frames.each do |bonus_frame|
-      bonus_frame.add_bounus_score(@shots[@shots.count - 1].score)
+      bonus_frame.add_bounus_score(@shots[-1].score)
     end
   end
 
