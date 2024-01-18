@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './Shot'
+require_relative './shot'
 
 class Frame
   attr_reader :score

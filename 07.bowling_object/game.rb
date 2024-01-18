@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative './Frame'
+require_relative './frame'
 
 class Game
   attr_accessor :frame
