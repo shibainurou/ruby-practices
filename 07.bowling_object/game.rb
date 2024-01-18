@@ -9,11 +9,8 @@ class Game
   MAX_SHOTS_PER_FRAME = 3
 
   def initialize
-    @frames = []
     @bonus_frames = []
-    MAX_FRAMES_PER_GAME.times do
-      @frames << Frame.new
-    end
+    @frames = Array.new(MAX_FRAMES_PER_GAME) { Frame.new }
   end
 
   def run(pins)
