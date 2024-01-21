@@ -42,4 +42,12 @@ class Frame
     @score += score
     @bonus_count -= 1
   end
+
+  def requre_bonus?
+    strike? || spare?
+  end
+
+  def complete?
+    strike? || @shots.size >= 2
+  end
 end
