@@ -41,6 +41,6 @@ class Game
   end
 
   def total_score
-    @frames.inject(0) { |sum, frame| sum + frame.score }
+    @frames.sum(&:score)
   end
 end
