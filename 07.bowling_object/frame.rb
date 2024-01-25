@@ -43,7 +43,7 @@ class Frame
     @bonus_count -= 1
   end
 
-  def requre_bonus?
+  def require_bonus?
     strike? || spare?
   end
 
