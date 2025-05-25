@@ -8,8 +8,7 @@ class LsCommand
     file_names = target_files(options)
     file_names.reverse! if options.reverse_order
 
-    klass = options.list_mode ? ListView : ColumnView
-    view = klass.new(file_names)
+    view = options.list_mode ? ListView.new(file_names) : ColumnView.new(file_names, 3)
     view.render
   end
 
